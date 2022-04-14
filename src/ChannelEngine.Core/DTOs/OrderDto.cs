@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 public class OrderDto
 {
     [JsonProperty("Content")]
-    public Content[] Content { get; set; }
+    public Orders[] Orders { get; set; }
 
     [JsonProperty("Count")]
     public long Count { get; set; }
@@ -39,7 +39,7 @@ public class ValidationErrors
 {
 }
 
-public class Content
+public class Orders
 {
     [JsonProperty("Id")]
     public long Id { get; set; }

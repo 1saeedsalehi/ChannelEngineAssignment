@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "Aivwa.Api": {
+    "ChannelEngine.Api": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",

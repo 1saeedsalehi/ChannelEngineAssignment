@@ -17,7 +17,7 @@ public class OrderService
     /// </summary>
     /// <param name="stoppingToken"></param>
     /// <returns></returns>
-    public async Task<OrderDto?> GetAllInProgressOrdersAsync(CancellationToken stoppingToken)
+    public async Task<IEnumerable<Orders>> GetAllInProgressOrdersAsync(CancellationToken stoppingToken = default)
     {
         return await _orderHttpClient.GetAllInProgressOrdersAsync(stoppingToken);
     }
@@ -27,18 +27,18 @@ public class OrderService
     /// </summary>
     /// <param name="stoppingToken"></param>
     /// <returns></returns>
-    public async Task<IEnumerable<TopSoldDto>> GetTopSoldProducts(CancellationToken stoppingToken)
+    public async Task<IEnumerable<TopSoldDto>> GetTopSoldProducts(CancellationToken cancellationToken=default)
     {
-        var orders = await _orderHttpClient.GetAllInProgressOrdersAsync(stoppingToken);
+        var orders = await _orderHttpClient.GetAllInProgressOrdersAsync(cancellationToken);
 
-        var topsold = orders.Content
+        var topsold = orders
             .SelectMany(order => order.Lines)
             .GroupBy(line => line.Description)
             .Select(groupped => new TopSoldDto
             {
                 ProductName = groupped.Key,
                 TotalQuantity = groupped.Sum(x => x.Quantity),
-                GTIN = groupped.Select(x=>x.Gtin).FirstOrDefault(),
+                GTIN = groupped.Select(x => x.Gtin).FirstOrDefault(),
             })
             .OrderByDescending(x => x.TotalQuantity)
             .Take(5)
@@ -52,9 +52,13 @@ public class OrderService
     /// </summary>
     /// <param name="stoppingToken"></param>
     /// <returns></returns>
-    public async Task<bool> UpdateStock(UpdateStockDto input,CancellationToken stoppingToken)
+    public async ValueTask<string> UpdateStock(string productNo, CancellationToken stoppingToken=default)
     {
-        var result = await _orderHttpClient.UpdateStock(input,stoppingToken);
+        var result = await _orderHttpClient.UpdateStock(new UpdateStockDto
+        {
+            MerchantProductNo = productNo,
+            Stock = 25,
+        }, stoppingToken);
 
         return result;
     }

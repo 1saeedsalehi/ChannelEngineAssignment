@@ -3,7 +3,6 @@ using ChannelEngine.Core;
 using ChannelEngine.Services;
 using ChannelEngine.Services.HttpClients;
 using ChannelEngine.Services.Services;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
@@ -31,7 +30,7 @@ public class Startup
         services.AddCors();
         services.AddHttpContextAccessor();
         services.AddAutoMapper(typeof(DefaultMappingProfile).Assembly);
-        services.AddHealthChecks();
+        services.AddControllersWithViews();
 
         services.AddHttpContextAccessor();
 
@@ -64,15 +63,8 @@ public class Startup
             }
         });
 
-
-
         //Adds services required for using options.
         services.AddOptions();
-        services.AddCors();
-        
-
-        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
         services.AddSingleton(Configuration);
         services.Configure<Settings>(Configuration);
 
@@ -100,26 +92,9 @@ public class Startup
             app.UseDeveloperExceptionPage();
         }
 
-
         app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
         app.UseRouting();
-
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllers();
-            endpoints.MapHealthChecks("/health", new HealthCheckOptions
-            {
-                ResultStatusCodes =
-                {
-                        [Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Healthy] = StatusCodes.Status200OK,
-                        [Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Degraded] = StatusCodes.Status503ServiceUnavailable,
-                        [Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
-                }
-            });
-
-        });
-
 
         app.UseSwagger();
         app.UseSwaggerUI(options =>
@@ -130,6 +105,15 @@ public class Startup
                     $"/swagger/{description.GroupName}/swagger.json",
                     description.GroupName.ToUpperInvariant());
             }
+        });
+
+        app.UseEndpoints(endpoints =>
+        {
+
+            //endpoints.MapControllers();
+            endpoints.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
         });
 
     }

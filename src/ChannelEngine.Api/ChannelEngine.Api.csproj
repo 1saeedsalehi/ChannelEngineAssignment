@@ -29,4 +29,9 @@
         <ProjectReference Include="..\ChannelEngine.Services\ChannelEngine.Services.csproj" />
     </ItemGroup>
 
+
+    <ItemGroup>
+      <Folder Include="Views\" />
+    </ItemGroup>
+
 </Project>

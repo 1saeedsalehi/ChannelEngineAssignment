@@ -47,10 +47,6 @@ public class App
 
         //TODO: validate productNo
 
-        Console.Write($"{Environment.NewLine} Please enter the new stock quantity: ");
-        var quantity = int.Parse(Console.ReadLine());
-
-        // TODO: validate quantity
 
         var result = await _orderService.UpdateStock(productNo).ConfigureAwait(false);
 

@@ -36,7 +36,7 @@
 
 			let product = that.data("product");
 
-			let data = { product, quantity };
+			let data = { product };
 
 			$.post("@Url.Action("UpdateStock", "Home")", data, function(response) {
 				alert(response);

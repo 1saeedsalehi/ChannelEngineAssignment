@@ -15,6 +15,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChannelEngine.Tests", "Chan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChannelEngine.Console", "ChannelEngine.Console\ChannelEngine.Console.csproj", "{2DAD8E87-BAB8-4BB6-8014-CA111999FDC7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{29A397D5-113B-438B-9B71-EEBC51E6077A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{212A3EA2-E094-45F7-A90E-64596DEC14F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,7 +50,11 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{125D8A68-E0E9-4783-BE4D-FAD587C9AFFC} = {29A397D5-113B-438B-9B71-EEBC51E6077A}
+		{88419FC2-5259-4F41-9D5D-BEF84154D888} = {212A3EA2-E094-45F7-A90E-64596DEC14F0}
+		{4E24516A-20D1-4E19-8EF5-83F78FC467B7} = {212A3EA2-E094-45F7-A90E-64596DEC14F0}
 		{8B527818-744B-42E4-B8D8-CB01811CB497} = {747575A8-A86E-44D3-A0E6-7726B8ADA351}
+		{2DAD8E87-BAB8-4BB6-8014-CA111999FDC7} = {29A397D5-113B-438B-9B71-EEBC51E6077A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A9804EBB-C18E-4433-A3F6-4E783F65D308}

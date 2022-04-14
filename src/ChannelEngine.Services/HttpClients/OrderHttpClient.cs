@@ -1,4 +1,5 @@
-﻿using ChannelEngine.Core;
+﻿using System.Text;
+using ChannelEngine.Core;
 using ChannelEngine.Core.DTOs;
 using ChannelEngine.Core.Exceptions;
 using Microsoft.Extensions.Options;
@@ -36,6 +37,30 @@ public class OrderHttpClient
             ? serialized
             : throw new ChannelEngineException("There is an issue with getting orders");
 
+    }
+
+    /// <summary>
+    /// http client for updating stock for a product
+    /// </summary>
+    /// <param name="cancellation"></param>
+    /// <returns></returns>
+    /// <exception cref="ChannelEngineException"></exception>
+    internal async ValueTask<bool> UpdateStock(UpdateStockDto input, CancellationToken cancellation)
+    {
+        var jsonSerialized = JsonConvert.SerializeObject(new List<UpdateStockDto>() { input });
+        var content = new StringContent(jsonSerialized, Encoding.UTF8, "application/json");
+
+        var httpResponse = await _httpClient.PutAsync($"/api/v2/offer/stock?apikey={_settings.ChannelEngine.ApiKey}"
+            , content,
+            cancellation);
+
+        httpResponse.EnsureSuccessStatusCode();
+
+        var result = await httpResponse.Content.ReadAsStringAsync(cancellation);
+
+        var serialized = JsonConvert.DeserializeObject<ChannelEngineWrappedResult<object>>(result);
+
+        return serialized is not null ? serialized.Success : false;
     }
 
 

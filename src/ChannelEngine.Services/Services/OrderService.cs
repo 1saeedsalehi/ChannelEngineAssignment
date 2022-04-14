@@ -49,4 +49,16 @@ public class OrderService
 
         return topsold;
     }
+
+    /// <summary>
+    /// Updates stock for specified product
+    /// </summary>
+    /// <param name="stoppingToken"></param>
+    /// <returns></returns>
+    public async Task<bool> UpdateStock(UpdateStockDto input,CancellationToken stoppingToken)
+    {
+        var result = await _orderHttpClient.UpdateStock(input,stoppingToken);
+
+        return result;
+    }
 }

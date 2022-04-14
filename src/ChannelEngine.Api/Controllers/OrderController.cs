@@ -1,4 +1,7 @@
-﻿using ChannelEngine.Core;
+﻿using AutoMapper;
+using ChannelEngine.Api.DTOS;
+using ChannelEngine.Core;
+using ChannelEngine.Core.DTOs;
 using ChannelEngine.Services.HttpClients;
 using ChannelEngine.Services.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -9,13 +12,17 @@ namespace ChannelEngine.Api.Controllers;
 public class OrderController : ApiControllerBase
 {
     private readonly OrderService _orderService;
+    private readonly IMapper _mapper;
     private readonly ILogger<OrderController> _logger;
+
 
     public OrderController(
         OrderService orderService,
+        IMapper mapper,
         ILogger<OrderController> logger)
     {
         _orderService = orderService;
+        _mapper = mapper;
         _logger = logger;
     }
 
@@ -45,4 +52,25 @@ public class OrderController : ApiControllerBase
         return Ok(result);
     }
 
+
+    /// <summary>
+    /// Will update stock to 25
+    /// </summary>
+    /// <param name="input"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpPatch("Update-Stock")]
+    public async Task<IActionResult> UpdateStock(UpdateStockInputDto input, CancellationToken cancellationToken)
+    {
+        if (input is null)
+        {
+            throw new ArgumentNullException(nameof(input));
+        }
+
+        var mapped = _mapper.Map<UpdateStockDto>(input);
+
+        var result = await _orderService.UpdateStock(mapped, cancellationToken);
+
+        return Ok(result);
+    }
 }

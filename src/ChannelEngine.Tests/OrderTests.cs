@@ -17,7 +17,7 @@ public class OrderTests
         var _orderClient = new Mock<OrderHttpClient>();
         _orderServiceMock = new Mock<OrderService>(_orderClient.Object);
 
-        _orderServiceMock.Setup(a => a.GetTopSoldProducts(CancellationToken.None)).ReturnsAsync(DataGenerator.CreateDummyData());
+        _orderServiceMock.Setup(a => a.GetTopSoldProducts(5,CancellationToken.None)).ReturnsAsync(DataGenerator.CreateDummyData());
     }
 
     [Fact]
@@ -27,7 +27,7 @@ public class OrderTests
         //In this case we don't have arrange
 
         //Act
-        var result = _orderServiceMock.Object.GetTopSoldProducts(CancellationToken.None)
+        var result = _orderServiceMock.Object.GetTopSoldProducts(5,CancellationToken.None)
             .GetAwaiter()
             .GetResult();
         

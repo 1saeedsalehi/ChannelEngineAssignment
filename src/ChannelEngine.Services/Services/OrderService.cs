@@ -5,13 +5,10 @@ using ChannelEngine.Services.HttpClients;
 namespace ChannelEngine.Services.Services;
 public class OrderService
 {
-    private readonly IMapper _mapper;
     private readonly OrderHttpClient _orderHttpClient;
 
-    public OrderService(IMapper mapper,
-        OrderHttpClient orderHttpClient)
+    public OrderService(OrderHttpClient orderHttpClient)
     {
-        _mapper = mapper;
         _orderHttpClient = orderHttpClient;
     }
 

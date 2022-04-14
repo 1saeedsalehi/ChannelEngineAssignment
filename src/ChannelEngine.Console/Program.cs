@@ -2,6 +2,7 @@
 
 using System.IO;
 using System.Threading.Tasks;
+using ChannelEngine.Core;
 using ChannelEngine.Services.HttpClients;
 using ChannelEngine.Services.Services;
 using Microsoft.Extensions.Configuration;
@@ -40,17 +41,19 @@ internal class Program
             .Build();
 
 
-        // add services:
-
+        //Adds services required for using options.
+        services.AddOptions();
+        services.AddSingleton(configuration);
+        services.Configure<Settings>(configuration);
         // add app
         services.AddTransient<App>();
         //Register Services in DI
         services.AddTransient<OrderService>();
 
-        //services.AddHttpClient<OrderHttpClient>(client =>
-        //{
-        //    client.BaseAddress = new Uri(Configuration["ChannelEngine:BaseUrl"]);
-        //});
+        services.AddHttpClient<OrderHttpClient>(client =>
+        {
+            client.BaseAddress = new Uri(configuration["ChannelEngine:BaseUrl"]);
+        });
     }
 }
 

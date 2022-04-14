@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 namespace ChannelEngine.Core.DTOs;
+
 public class ChannelEngineWrappedResult<T> where T : class
 {
     [JsonProperty("Content")]
@@ -18,6 +19,4 @@ public class ChannelEngineWrappedResult<T> where T : class
     [JsonProperty("Message")]
     public string Message { get; set; }
 
-    [JsonProperty("ValidationErrors")]
-    public ValidationErrors ValidationErrors { get; set; }
 }

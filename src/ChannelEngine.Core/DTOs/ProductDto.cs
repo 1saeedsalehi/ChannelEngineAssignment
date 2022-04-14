@@ -1,7 +1,8 @@
 ﻿namespace ChannelEngine.Core.DTOs;
-public class TopSoldDto
+public class ProductDto
 {
     public string ProductName { get; set; }
     public string GTIN { get; set; }
     public long TotalQuantity { get; set; }
+    public string MerchantProductNo { get; set; }
 }

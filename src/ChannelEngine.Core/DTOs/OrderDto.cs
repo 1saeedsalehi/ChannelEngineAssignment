@@ -4,42 +4,9 @@ namespace ChannelEngine.Core.DTOs;
 using System;
 using Newtonsoft.Json;
 
+
+
 public class OrderDto
-{
-    [JsonProperty("Content")]
-    public Orders[] Orders { get; set; }
-
-    [JsonProperty("Count")]
-    public long Count { get; set; }
-
-    [JsonProperty("TotalCount")]
-    public long TotalCount { get; set; }
-
-    [JsonProperty("ItemsPerPage")]
-    public long ItemsPerPage { get; set; }
-
-    [JsonProperty("StatusCode")]
-    public long StatusCode { get; set; }
-
-    [JsonProperty("LogId")]
-    public object LogId { get; set; }
-
-    [JsonProperty("Success")]
-    public bool Success { get; set; }
-
-    [JsonProperty("Message")]
-    public object Message { get; set; }
-
-    [JsonProperty("ValidationErrors")]
-    public ValidationErrors ValidationErrors { get; set; }
-}
-
-
-public class ValidationErrors
-{
-}
-
-public class Orders
 {
     [JsonProperty("Id")]
     public long Id { get; set; }
@@ -302,5 +269,3 @@ public class StockLocation
     [JsonProperty("Name")]
     public string Name { get; set; }
 }
-
-

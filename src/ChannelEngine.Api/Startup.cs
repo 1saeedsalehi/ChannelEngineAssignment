@@ -54,6 +54,14 @@ public class Startup
         services.AddSwaggerGen(options =>
         {
             options.SwaggerDoc(AppConsts.ApiVersion, new() { Title = AppConsts.ApiTitle, Version = AppConsts.ApiVersion });
+
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var commentsFileName = $"{AppDomain.CurrentDomain.FriendlyName}.Xml";
+            var commentsFile = Path.Combine(baseDirectory, commentsFileName);
+            if (File.Exists(commentsFile))
+            {
+                options.IncludeXmlComments(commentsFile);
+            }
         });
 
 

@@ -56,20 +56,19 @@ public class OrderController : ApiControllerBase
     /// <summary>
     /// Will update stock to 25
     /// </summary>
-    /// <param name="input"></param>
+    /// <param name="productNo"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpPatch("Update-Stock")]
-    public async Task<IActionResult> UpdateStock(UpdateStockInputDto input, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateStock(string productNo, CancellationToken cancellationToken)
     {
-        if (input is null)
+
+        if (string.IsNullOrWhiteSpace(productNo))
         {
-            throw new ArgumentNullException(nameof(input));
+            throw new ArgumentNullException(nameof(productNo));
         }
 
-        var mapped = _mapper.Map<UpdateStockDto>(input);
-
-        var result = await _orderService.UpdateStock(mapped, cancellationToken);
+        var result = await _orderService.UpdateStock(productNo, cancellationToken);
 
         return Ok(result);
     }

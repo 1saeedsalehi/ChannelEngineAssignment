@@ -1,30 +1,14 @@
-﻿using AutoMapper;
-using ChannelEngine.Api.DTOS;
-using ChannelEngine.Core;
-using ChannelEngine.Core.DTOs;
-using ChannelEngine.Services.HttpClients;
-using ChannelEngine.Services.Services;
+﻿using ChannelEngine.Services.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace ChannelEngine.Api.Controllers;
 
 public class OrderController : ApiControllerBase
 {
     private readonly OrderService _orderService;
-    private readonly IMapper _mapper;
-    private readonly ILogger<OrderController> _logger;
 
 
-    public OrderController(
-        OrderService orderService,
-        IMapper mapper,
-        ILogger<OrderController> logger)
-    {
-        _orderService = orderService;
-        _mapper = mapper;
-        _logger = logger;
-    }
+    public OrderController(OrderService orderService) => _orderService = orderService;
 
     /// <summary>
     /// Get All In Progress Orders
@@ -47,7 +31,7 @@ public class OrderController : ApiControllerBase
     [HttpGet("Top-Sold")]
     public async Task<IActionResult> GetTopSoldProducts(CancellationToken cancellationToken)
     {
-        var result = await _orderService.GetTopSoldProducts(cancellationToken);
+        var result = await _orderService.GetTopSoldProducts(cancellationToken: cancellationToken);
 
         return Ok(result);
     }

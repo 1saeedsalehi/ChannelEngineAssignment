@@ -30,15 +30,16 @@
 		$(".update-stock").on("click", function(e) {
 			e.preventDefault();
 
+            debugger;
+
 			let that = $(this);
 
 			let product = that.data("product");
-			let quantity = that.data("quantity");
 
 			let data = { product, quantity };
 
 			$.post("@Url.Action("UpdateStock", "Home")", data, function(response) {
-				alert(response.message);
+				alert(response);
 			});
 
 		});

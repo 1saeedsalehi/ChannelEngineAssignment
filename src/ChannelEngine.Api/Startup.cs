@@ -92,6 +92,8 @@ public class Startup
 
         app.UseRouting();
 
+        app.UseStaticFiles();
+
         app.UseSwagger();
         app.UseSwaggerUI(options =>
         {

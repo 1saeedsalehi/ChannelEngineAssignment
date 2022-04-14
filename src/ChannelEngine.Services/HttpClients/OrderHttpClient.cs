@@ -23,20 +23,32 @@ public class OrderHttpClient
     /// <param name="cancellation"></param>
     /// <returns></returns>
     /// <exception cref="ChannelEngineException"></exception>
-    internal async Task<IEnumerable<Orders>> GetAllInProgressOrdersAsync(CancellationToken cancellation)
+    internal async Task<IEnumerable<OrderDto>> GetAllInProgressOrdersAsync(CancellationToken cancellation)
     {
         //TODO: move api key to better place ! DRY
-        var httpResponse = await _httpClient.GetAsync($"/api/v2/orders?statuses=IN_PROGRESS&apikey={_settings.ChannelEngine.ApiKey}", cancellation);
+        var url = $"/api/v2/orders?statuses=IN_PROGRESS&apikey={_settings.ChannelEngine.ApiKey}";
+        int pageIndex = 1;
+        PagedResultDto<OrderDto>? serialized;
 
-        httpResponse.EnsureSuccessStatusCode();
+        var orders = new List<OrderDto>();
+        do
+        {
+            var httpResponse = await _httpClient.GetAsync(url + $"&page={pageIndex}", cancellation);
 
-        var result = await httpResponse.Content.ReadAsStringAsync(cancellation);
+            httpResponse.EnsureSuccessStatusCode();
 
-        var serialized = JsonConvert.DeserializeObject<OrderDto>(result);
+            var result = await httpResponse.Content.ReadAsStringAsync(cancellation);
 
-        return serialized is not null && serialized.Success
-            ? serialized.Orders
-            : throw new ChannelEngineException("There is an issue with getting orders");
+            serialized = JsonConvert.DeserializeObject<PagedResultDto<OrderDto>>(result);
+
+            orders.AddRange(serialized.Content);
+
+            pageIndex++;
+
+        } while (serialized.NextPage());
+
+
+        return orders;
 
     }
 

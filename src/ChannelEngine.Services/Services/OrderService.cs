@@ -17,7 +17,7 @@ public class OrderService
     /// </summary>
     /// <param name="stoppingToken"></param>
     /// <returns></returns>
-    public async Task<IEnumerable<Orders>> GetAllInProgressOrdersAsync(CancellationToken stoppingToken = default)
+    public async Task<IEnumerable<OrderDto>> GetAllInProgressOrdersAsync(CancellationToken stoppingToken = default)
     {
         return await _orderHttpClient.GetAllInProgressOrdersAsync(stoppingToken);
     }
@@ -27,21 +27,25 @@ public class OrderService
     /// </summary>
     /// <param name="stoppingToken"></param>
     /// <returns></returns>
-    public async Task<IEnumerable<TopSoldDto>> GetTopSoldProducts(CancellationToken cancellationToken=default)
+    public async Task<IEnumerable<ProductDto>> GetTopSoldProducts(int count = 5, CancellationToken cancellationToken = default)
     {
+        //We don't need call this again - this method can be an extension method for Orders! 
+        //TODO: fix it later!
+
         var orders = await _orderHttpClient.GetAllInProgressOrdersAsync(cancellationToken);
 
         var topsold = orders
             .SelectMany(order => order.Lines)
             .GroupBy(line => line.Description)
-            .Select(groupped => new TopSoldDto
+            .Select(groupped => new ProductDto
             {
                 ProductName = groupped.Key,
                 TotalQuantity = groupped.Sum(x => x.Quantity),
                 GTIN = groupped.Select(x => x.Gtin).FirstOrDefault(),
+                MerchantProductNo = groupped.Select(x => x.MerchantProductNo).FirstOrDefault(),
             })
             .OrderByDescending(x => x.TotalQuantity)
-            .Take(5)
+            .Take(count)
             .AsEnumerable();
 
         return topsold;
@@ -52,7 +56,7 @@ public class OrderService
     /// </summary>
     /// <param name="stoppingToken"></param>
     /// <returns></returns>
-    public async ValueTask<string> UpdateStock(string productNo, CancellationToken stoppingToken=default)
+    public async ValueTask<string> UpdateStock(string productNo, CancellationToken stoppingToken = default)
     {
         var result = await _orderHttpClient.UpdateStock(new UpdateStockDto
         {

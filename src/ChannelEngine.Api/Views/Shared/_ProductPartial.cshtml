@@ -1,0 +1,13 @@
+﻿@using ChannelEngine.Core.DTOs
+
+@model ProductDto
+
+<tr>
+	<td>@Model.GTIN</td>
+	<td>@Model.MerchantProductNo</td>
+	<td>@Model.ProductName</td>
+	<td>@Model.TotalQuantity</td>
+	<td>
+		<a class="update-stock" href="" data-product="@Model.MerchantProductNo">Update Stock</a>
+	</td>
+</tr>

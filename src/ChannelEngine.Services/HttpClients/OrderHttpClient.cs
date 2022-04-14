@@ -61,8 +61,8 @@ public class OrderHttpClient
     internal async ValueTask<string> UpdateStock(UpdateStockDto input, CancellationToken cancellation)
     {
         //TODO: move api key to better place ! DRY
-        var httpResponse = await _httpClient.PutAsJsonAsync($"/api/v2/offer/stock?apikey={_settings.ChannelEngine.ApiKey}"
-            ,input,
+        var httpResponse = await _httpClient.PutAsJsonAsync($"/api/v2/offer?apikey={_settings.ChannelEngine.ApiKey}"
+            ,new List<UpdateStockDto> { input },
             cancellation);
 
         httpResponse.EnsureSuccessStatusCode();

@@ -1,4 +1,4 @@
-﻿using System.Text;
+﻿using System.Net.Http.Json;
 using ChannelEngine.Core;
 using ChannelEngine.Core.DTOs;
 using ChannelEngine.Core.Exceptions;
@@ -23,8 +23,9 @@ public class OrderHttpClient
     /// <param name="cancellation"></param>
     /// <returns></returns>
     /// <exception cref="ChannelEngineException"></exception>
-    internal async Task<OrderDto?> GetAllInProgressOrdersAsync(CancellationToken cancellation)
+    internal async Task<IEnumerable<Orders>> GetAllInProgressOrdersAsync(CancellationToken cancellation)
     {
+        //TODO: move api key to better place ! DRY
         var httpResponse = await _httpClient.GetAsync($"/api/v2/orders?statuses=IN_PROGRESS&apikey={_settings.ChannelEngine.ApiKey}", cancellation);
 
         httpResponse.EnsureSuccessStatusCode();
@@ -34,7 +35,7 @@ public class OrderHttpClient
         var serialized = JsonConvert.DeserializeObject<OrderDto>(result);
 
         return serialized is not null && serialized.Success
-            ? serialized
+            ? serialized.Orders
             : throw new ChannelEngineException("There is an issue with getting orders");
 
     }
@@ -45,13 +46,11 @@ public class OrderHttpClient
     /// <param name="cancellation"></param>
     /// <returns></returns>
     /// <exception cref="ChannelEngineException"></exception>
-    internal async ValueTask<bool> UpdateStock(UpdateStockDto input, CancellationToken cancellation)
+    internal async ValueTask<string> UpdateStock(UpdateStockDto input, CancellationToken cancellation)
     {
-        var jsonSerialized = JsonConvert.SerializeObject(new List<UpdateStockDto>() { input });
-        var content = new StringContent(jsonSerialized, Encoding.UTF8, "application/json");
-
-        var httpResponse = await _httpClient.PutAsync($"/api/v2/offer/stock?apikey={_settings.ChannelEngine.ApiKey}"
-            , content,
+        //TODO: move api key to better place ! DRY
+        var httpResponse = await _httpClient.PutAsJsonAsync($"/api/v2/offer/stock?apikey={_settings.ChannelEngine.ApiKey}"
+            ,input,
             cancellation);
 
         httpResponse.EnsureSuccessStatusCode();
@@ -60,7 +59,7 @@ public class OrderHttpClient
 
         var serialized = JsonConvert.DeserializeObject<ChannelEngineWrappedResult<object>>(result);
 
-        return serialized is not null ? serialized.Success : false;
+        return serialized is not null ? serialized.Message : string.Empty;
     }
 
 

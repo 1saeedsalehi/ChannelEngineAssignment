@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using ChannelEngine.Core;
+﻿using ChannelEngine.Core;
 using ChannelEngine.Services;
 using ChannelEngine.Services.HttpClients;
 using ChannelEngine.Services.Services;
@@ -81,11 +80,8 @@ public class Startup
 
     public void Configure(IApplicationBuilder app,
         IWebHostEnvironment env,
-        IMapper mapper,
         IApiVersionDescriptionProvider provider)
     {
-
-        mapper.ConfigurationProvider.AssertConfigurationIsValid();
 
         if (env.IsDevelopment())
         {

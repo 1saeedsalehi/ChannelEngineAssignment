@@ -68,7 +68,7 @@ public class App
         Console.WriteLine(serialzied);
     }
 
-    private async Task<IEnumerable<Orders>> GetAllOrders()
+    private async Task<IEnumerable<OrderDto>> GetAllOrders()
     {
         Console.WriteLine("Getting all IN_PROGRESS products");
         var result = await _orderService.GetAllInProgressOrdersAsync().ConfigureAwait(false);
